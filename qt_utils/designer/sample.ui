@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Form</class>
+ <widget class="QWidget" name="Form">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>571</width>
+    <height>281</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QHBoxLayout" name="horizontalLayout" stretch="1,0">
+   <item>
+    <widget class="GlobeWidget" name="globe">
+     <property name="angle">
+      <number>30</number>
+     </property>
+     <property name="latitude">
+      <double>10.000000000000000</double>
+     </property>
+     <property name="longitude">
+      <double>39.000000000000000</double>
+     </property>
+     <property name="positionShown">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="groupBox">
+     <property name="title">
+      <string>GroupBox</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout">
+      <item row="1" column="0">
+       <widget class="QLabel" name="label">
+        <property name="text">
+         <string>Angle:  </string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QSlider" name="horizontalSlider">
+        <property name="value">
+         <number>30</number>
+        </property>
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0" colspan="2">
+       <widget class="GeoLocationWidget" name="geoloc">
+        <property name="latitude">
+         <double>10.000000000000000</double>
+        </property>
+        <property name="longitude">
+         <double>30.000000000000000</double>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>GlobeWidget</class>
+   <extends>QWidget</extends>
+   <header>sample_widgets</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>GeoLocationWidget</class>
+   <extends>QWidget</extends>
+   <header>sample_widgets</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>geoloc</sender>
+   <signal>latitudeChanged(double)</signal>
+   <receiver>globe</receiver>
+   <slot>setLatitude(double)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>341</x>
+     <y>94</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>198</x>
+     <y>109</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>geoloc</sender>
+   <signal>longitudeChanged(double)</signal>
+   <receiver>globe</receiver>
+   <slot>setLongitude(double)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>354</x>
+     <y>79</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>228</x>
+     <y>192</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>horizontalSlider</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>globe</receiver>
+   <slot>setAngle(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>431</x>
+     <y>177</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>214</x>
+     <y>164</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>
