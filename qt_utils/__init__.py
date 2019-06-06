@@ -1,6 +1,7 @@
 from qt_utils.colors import findColor
 from PyQt5.QtGui import QPalette
 from qt_utils import designer, colors
+from PyQt5 import QtWidgets
 
 #TODO: make pytests for this module
 
@@ -78,3 +79,19 @@ def getCurrentColor(widget, color='Window'):
         return findColor(widget.palette().color(color).name())
     else:
         raise TypeError
+
+
+class QHLine(QtWidgets.QFrame):
+    def __init__(self):
+        super(QHLine, self).__init__()
+        self.setFrameShape(QtWidgets.QFrame.HLine)
+        self.setFrameShadow(QtWidgets.QFrame.Sunken)
+        self.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
+
+
+class QVLine(QtWidgets.QFrame):
+    def __init__(self):
+        super(QVLine, self).__init__()
+        self.setFrameShape(QtWidgets.QFrame.VLine)
+        self.setFrameShadow(QtWidgets.QFrame.Sunken)
+        self.setSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Expanding)
