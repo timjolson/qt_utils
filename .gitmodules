@@ -1,0 +1,3 @@
+[submodule "qt_utils/verticallabelwidget"]
+	path = qt_utils/verticallabelwidget
+	url = https://github.com/timjolson/verticallabelwidget.git
