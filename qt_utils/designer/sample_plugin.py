@@ -1,3 +1,8 @@
+"""
+Inspired by and modified from https://doc.qt.io/archives/qq/qq26-pyqtdesigner.html
+to work with PyQt5
+"""
+
 from PyQt5.QtDesigner import QExtensionFactory, \
     QPyDesignerTaskMenuExtension, QDesignerFormWindowInterface
 from PyQt5.QtCore import QVariant
