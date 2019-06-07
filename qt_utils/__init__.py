@@ -28,7 +28,7 @@ def eventIncludesButtons(event, buttons):
         stat += int(event.button())
     if hasattr(event, 'modifiers'):
         stat += int(event.modifiers())
-    check = sum(buttons)
+    check = sum(buttons) if hasattr(buttons, '__iter__') else buttons
     return (stat & check) == check
 
 
@@ -46,8 +46,8 @@ def eventExcludesButtons(event, buttons):
         stat += int(event.button())
     if hasattr(event, 'modifiers'):
         stat += int(event.modifiers())
-    check = sum(buttons)
-    return (stat ^ check) == check
+    check = sum(buttons) if hasattr(buttons, '__iter__') else buttons
+    return stat & check == 0
 
 
 def eventMatchesButtons(event, buttons, excludeButtons=0):
