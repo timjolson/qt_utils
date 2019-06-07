@@ -6,6 +6,7 @@ class QHLine(QtWidgets.QFrame):
         super(QHLine, self).__init__(parent)
         self.setFrameShape(QtWidgets.QFrame.HLine)
         self.setFrameShadow(QtWidgets.QFrame.Sunken)
+        self.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
 
 
 class QVLine(QtWidgets.QFrame):
@@ -13,4 +14,5 @@ class QVLine(QtWidgets.QFrame):
         super(QVLine, self).__init__(parent)
         self.setFrameShape(QtWidgets.QFrame.VLine)
         self.setFrameShadow(QtWidgets.QFrame.Sunken)
+        self.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
 
