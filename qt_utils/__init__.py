@@ -8,26 +8,29 @@ def loggableQtName(self):
     """Property to identify instance when logging or when searching in Qt for this widget.
     See objectName for Qt Objects.
 
-    :return: string, f"{type(self).__name__}.{self.objectName()}"
-        e.g. 'DraggableWidget.objectName:'
+    :return: string, f"{type(self).__name__}:{self.objectName()}"
+        e.g. 'DraggableWidget:objectName'
     """
-    return f"{type(self).__name__}.{self.objectName()}"
+    return f"{type(self).__name__}:{self.objectName()}"
 
 
 def eventIncludesButtons(event, buttons):
     """Checks event for including buttons. Event must have all buttons/keys in buttons.
 
     :param event: QEvent having .buttons(), .button(), and/or .modifiers()
-    :param buttons: iterable of buttons/keys to compare to
+    :param buttons: iterable of buttons/keys to compare to, or int of Qt buttons
     :return: bool, True if all buttons are in event
     """
     stat = int(0)
-    if hasattr(event, 'buttons'):
-        stat += int(event.buttons())
-    elif hasattr(event, 'button'):
-        stat += int(event.button())
-    if hasattr(event, 'modifiers'):
-        stat += int(event.modifiers())
+    if isinstance(event, int):
+        stat = int(event)
+    else:
+        if hasattr(event, 'buttons'):
+            stat += int(event.buttons())
+        elif hasattr(event, 'button'):
+            stat += int(event.button())
+        if hasattr(event, 'modifiers'):
+            stat += int(event.modifiers())
     check = sum(buttons) if hasattr(buttons, '__iter__') else buttons
     return (stat & check) == check
 
@@ -36,30 +39,43 @@ def eventExcludesButtons(event, buttons):
     """Checks event for NOT having buttons. Event must NOT have all buttons/keys in buttons.
 
     :param event: QEvent having .buttons(), .button(), and/or .modifiers()
-    :param buttons: iterable of buttons/keys to compare to
+    :param buttons: iterable of buttons/keys to compare to, or int of Qt buttons
     :return: bool, True if all buttons are NOT in event
     """
     stat = int(0)
-    if hasattr(event, 'buttons'):
-        stat += int(event.buttons())
-    elif hasattr(event, 'button'):
-        stat += int(event.button())
-    if hasattr(event, 'modifiers'):
-        stat += int(event.modifiers())
+    if isinstance(event, int):
+        stat = int(event)
+    else:
+        if hasattr(event, 'buttons'):
+            stat += int(event.buttons())
+        elif hasattr(event, 'button'):
+            stat += int(event.button())
+        if hasattr(event, 'modifiers'):
+            stat += int(event.modifiers())
     check = sum(buttons) if hasattr(buttons, '__iter__') else buttons
-    return stat & check == 0
+    return (stat & check) == 0
 
 
-def eventMatchesButtons(event, buttons, excludeButtons=0):
+def eventMatchesButtons(event, buttons):
     """Checks event for buttons. Event must have all buttons/keys in buttons, and no others.
 
     :param event: QEvent having .buttons(), .button(), and/or .modifiers()
-    :param buttons: iterable of buttons/keys to compare to
-    :param excludeButtons: iterable of buttons/keys to make sure are not in event
+    :param buttons: iterable of buttons/keys to compare to, or int of Qt buttons
     :return: bool, True if all buttons are in event, with no extra buttons or keys.
             False otherwise
     """
-    return eventIncludesButtons(event, buttons) and eventExcludesButtons(event, excludeButtons)
+    stat = int(0)
+    if isinstance(event, int):
+        stat = int(event)
+    else:
+        if hasattr(event, 'buttons'):
+            stat += int(event.buttons())
+        elif hasattr(event, 'button'):
+            stat += int(event.button())
+        if hasattr(event, 'modifiers'):
+            stat += int(event.modifiers())
+    check = sum(buttons) if hasattr(buttons, '__iter__') else buttons
+    return check == stat
 
 
 def getCurrentColor(widget, color='Window'):
