@@ -130,7 +130,7 @@ class _CollapsibleDockHelper(QtWidgets.QDockWidget):
         super().__init__(parent)
         self._collapsed = kwargs.pop('collapsed', False)
         self._inited = False  # if widget has been collapsed/expanded once
-        self._collapsedSize = kwargs.pop('collapsed_size', 20)
+        self._collapsedSize = kwargs.pop('collapsedSize', 20)
         self._setupTitleBar()
 
         self._setupToggleAnimation(kwargs.pop('animationDuration', 200))
@@ -261,9 +261,43 @@ class VCollapsibleDockWidget(_CollapsibleDockHelper):
         toggleAnimation.addAnimation(QtCore.QPropertyAnimation(self.widget(), b"maximumWidth"))
 
 
+class DictComboBox(QtWidgets.QComboBox):
+    def __init__(self, parent, **kwargs):
+        options = kwargs.pop('options', dict())
+        QtWidgets.QComboBox.__init__(self, parent)
+        self.addItems(options)
+
+    def addItems(self, textToDataDict=None, **kwargs):
+        self.insertItems(self.count()-1, textToDataDict, **kwargs)
+
+    def insertItems(self, index, textToDataDict=None, **kwargs):
+        if textToDataDict is None:
+            textToDataDict = kwargs
+        if not isinstance(textToDataDict, dict):
+            if hasattr(textToDataDict, '__iter__'):
+                textToDataDict = {k: k for k in textToDataDict}
+
+        super().insertItems(index, list(textToDataDict.keys()))
+        for k, v in textToDataDict.items():
+            super().setItemData(self.findText(k), v, QtCore.Qt.UserRole)
+
+    def itemData(self, index, role=QtCore.Qt.UserRole):
+        return super().itemData(index, role)
+
+    def currentData(self, role=QtCore.Qt.UserRole):
+        return super().currentData(role)
+
+    def allItems(self):
+        return {self.itemText(i):self.itemData(i) for i in range(self.count())}
+
+    def setAllItems(self, textToDataDict=None, **kwargs):
+        self.clear()
+        self.addItems(textToDataDict, **kwargs)
+
+
 __all__ = ['HorizontalLine', 'VerticalLine', 'VerticalLabel', 'VerticalTitleBar', 'HorizontalTitleBar',
            'HCollapsibleDockWidget', 'VCollapsibleDockWidget', 'AutoColorLineEdit', 'EntryWidget',
            'LabelLineEdit', 'ButtonLineEdit', 'ButtonEntryWidget', 'SympyAutoColorLineEdit',
            'SympyEntryWidget', 'SympyLabelLineEdit', 'SympySymbolLineEdit', 'AdjustableMixin',
-           'AdjustableContainer', 'AdjustableImage'
+           'AdjustableContainer', 'AdjustableImage', 'DictComboBox'
            ]
