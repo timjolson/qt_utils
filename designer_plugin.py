@@ -3,9 +3,9 @@ from qt_utils.designer import WidgetPluginFactory
 from qt_utils.widgets import \
     (VerticalLine, HorizontalLine, VerticalLabel, VerticalTitleBar,
      HorizontalTitleBar, VCollapsibleDockWidget, HCollapsibleDockWidget)
-from qt_utils.entrywidget.entryWidget import \
+from entryWidget import \
     AutoColorLineEdit, EntryWidget, LabelLineEdit, ButtonLineEdit, ButtonEntryWidget
-from qt_utils.sympyentrywidget.sympyEntryWidget import \
+from sympyEntryWidget import \
     SympyAutoColorLineEdit, SympyEntryWidget, SympyLabelLineEdit, SympySymbolLineEdit
 
 

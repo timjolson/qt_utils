@@ -1,7 +1,7 @@
 from PyQt5 import QtWidgets, Qt, QtCore, QtGui
-from qt_utils.entrywidget.entryWidget import \
+from entryWidget import \
     (AutoColorLineEdit, LabelLineEdit, EntryWidget, ButtonLineEdit, ButtonEntryWidget)
-from qt_utils.sympyentrywidget.sympyEntryWidget import \
+from sympyEntryWidget import \
     (SympyAutoColorLineEdit, SympyLabelLineEdit, SympySymbolLineEdit, SympyEntryWidget)
 from qt_utils.adjustablewidget.adjustableWidget import AdjustableMixin, AdjustableImage, AdjustableContainer
 
