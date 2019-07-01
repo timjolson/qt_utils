@@ -1,8 +1,4 @@
 from PyQt5 import QtWidgets, Qt, QtCore, QtGui
-from entryWidget import \
-    (AutoColorLineEdit, LabelLineEdit, EntryWidget, ButtonLineEdit, ButtonEntryWidget)
-from sympyEntryWidget import \
-    (SympyAutoColorLineEdit, SympyLabelLineEdit, SympySymbolLineEdit, SympyEntryWidget)
 from qt_utils.adjustablewidget.adjustableWidget import AdjustableMixin, AdjustableImage, AdjustableContainer
 
 
@@ -296,8 +292,6 @@ class DictComboBox(QtWidgets.QComboBox):
 
 
 __all__ = ['HorizontalLine', 'VerticalLine', 'VerticalLabel', 'VerticalTitleBar', 'HorizontalTitleBar',
-           'HCollapsibleDockWidget', 'VCollapsibleDockWidget', 'AutoColorLineEdit', 'EntryWidget',
-           'LabelLineEdit', 'ButtonLineEdit', 'ButtonEntryWidget', 'SympyAutoColorLineEdit',
-           'SympyEntryWidget', 'SympyLabelLineEdit', 'SympySymbolLineEdit', 'AdjustableMixin',
+           'HCollapsibleDockWidget', 'VCollapsibleDockWidget', 'AdjustableMixin',
            'AdjustableContainer', 'AdjustableImage', 'DictComboBox'
            ]
