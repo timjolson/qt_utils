@@ -9,10 +9,13 @@ def loggableQtName(self):
     """Property to identify instance when logging or when searching in Qt for this widget.
     See objectName for Qt Objects.
 
-    :return: string, f"{type(self).__name__}:{self.objectName()}"
-        e.g. 'DraggableWidget:objectName'
+    :return: string, e.g.:
+        'DraggableWidget'
+        or
+        'DraggableWidget:objectName'
     """
-    return f"{type(self).__name__}:{self.objectName()}"
+    on = self.objectName()
+    return type(self).__name__ + (f":{on}" if on else "")
 
 
 class ErrorMixin():
