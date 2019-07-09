@@ -56,7 +56,8 @@ class _TitleBarHelper(QtWidgets.QWidget):
     def __init__(self, parent=None, text=None):
         super().__init__(parent)
         self.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
-        self._setupUi(text)
+        self.setupUi(text)
+        self._mousePressPos = None
 
     def setArrowType(self, arrow_type):
         self.button.setArrowType(arrow_type)
@@ -65,16 +66,16 @@ class _TitleBarHelper(QtWidgets.QWidget):
         self.label.setText(text)
 
     def mousePressEvent(self, event=None):
-        self._mouse_press_pos = event.pos()
+        self._mousePressPos = event.pos()
 
     def mouseReleaseEvent(self, event=None):
-        if hasattr(self, '_mouse_press_pos') and self._mouse_press_pos is not None:
-            self._mouse_press_pos = None
+        if self._mousePressPos is not None:
+            self._mousePressPos = None
             self.clicked.emit()
 
 
 class VerticalTitleBar(_TitleBarHelper):
-    def _setupUi(self, text):
+    def setupUi(self, text):
         label = VerticalLabel(text or "Label Text")
         label.mousePressEvent = lambda e: self.mousePressEvent(e)
         label.mouseReleaseEvent = lambda e: self.mouseReleaseEvent(e)
@@ -98,7 +99,7 @@ class VerticalTitleBar(_TitleBarHelper):
 
 
 class HorizontalTitleBar(_TitleBarHelper):
-    def _setupUi(self, text):
+    def setupUi(self, text):
         label = QtWidgets.QLabel(text or "Label Text")
         label.mousePressEvent = lambda e: self.mousePressEvent(e)
         label.mouseReleaseEvent = lambda e: self.mouseReleaseEvent(e)
