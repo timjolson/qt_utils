@@ -179,9 +179,6 @@ class HCollapsibleDockWidget(_CollapsibleDockHelper):
     def setTitle(self, title):
         self.titleBarWidget().setText(title)
 
-    # def setCheckable(self, checkable):
-    #     super().setCheckable(checkable)
-
     @QtCore.pyqtSlot()
     def collapse(self, collapse=True):
         if collapse == self.collapsed and self._inited is True:

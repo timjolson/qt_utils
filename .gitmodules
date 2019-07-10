@@ -1,6 +1,3 @@
-[submodule "qt_utils/verticallabelwidget"]
-	path = qt_utils/verticallabelwidget
-	url = https://github.com/timjolson/verticallabelwidget.git
 [submodule "qt_utils/adjustablewidget"]
 	path = qt_utils/adjustablewidget
 	url = https://github.com/timjolson/adjustablewidget.git
