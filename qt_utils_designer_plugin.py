@@ -1,8 +1,8 @@
 from qt_utils.designer import WidgetPluginFactory
 
 from qt_utils.widgets import \
-    (VerticalLine, HorizontalLine, VerticalLabel, VerticalTitleBar,
-     HorizontalTitleBar, VCollapsibleDockWidget, HCollapsibleDockWidget)
+    (VerticalLine, HorizontalLine, VerticalLabel, VerticalTitleBar, HorizontalTitleBar,
+     VCollapsibleDockWidget, HCollapsibleDockWidget, CollapsibleGroupBox, DictComboBox)
 from entryWidget import \
     AutoColorLineEdit, EntryWidget, LabelLineEdit, ButtonLineEdit, ButtonEntryWidget
 from sympyEntryWidget import \
@@ -19,7 +19,10 @@ VTitleBarPlugin = WidgetPluginFactory(
     VerticalTitleBar, toolTip='Clickable Vertical Title Bar', isContainer=False)
 HTitleBarPlugin = WidgetPluginFactory(
     HorizontalTitleBar, toolTip='Clickable Horizontal Title Bar', isContainer=False)
+DictComboBoxPlugin = WidgetPluginFactory(
+    DictComboBox, toolTip='QComboBox, python usage allows dict for options with custom data', isContainer=False)
 
+CollapsibleGroupBoxPlugin = WidgetPluginFactory(CollapsibleGroupBox, toolTip='Collapsible GroupBox')
 HCollapsibleDockPlugin = WidgetPluginFactory(HCollapsibleDockWidget, toolTip='Collapsible DockWidget Horizontal Layout')
 VCollapsibleDockPlugin = WidgetPluginFactory(VCollapsibleDockWidget, toolTip='Collapsible DockWidget Vertical Layout')
 def xml(self):

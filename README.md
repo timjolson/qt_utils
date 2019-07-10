@@ -16,7 +16,10 @@ Submodules
         rgb_to_hex  # convert (r,g,b) to hex string
         findColor  # provide color (r,g,b)/#FFFFFF/name, get full color tuple from colorList
         tuple_distance  # calculate euclidean distance between tuples
-    
+        
+    widgets  # collection of widgets
+    qt_utils_designer_plugin.py  # plugin script for qtDesigner (install to system default with 'sudo python3 qt_utils')
+
 Subpackages
 
     designer  # qtDesigner helpers and examples
@@ -30,5 +33,4 @@ Subpackages
         *sample_widgets.py  # example widgets for qtDesigner integration
             
 
-*Plugin examples adapted from
-https://doc.qt.io/archives/qq/qq26-pyqtdesigner.html
+*Plugin examples adapted from  https://doc.qt.io/archives/qq/qq26-pyqtdesigner.html
