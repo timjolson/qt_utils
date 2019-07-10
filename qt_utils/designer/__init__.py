@@ -204,12 +204,16 @@ def install_plugin_files(files):
     if not os.path.exists(plugins_path):
         os.makedirs(plugins_path)
 
-    for plugin in files:
-        path = os.path.abspath(plugin)
-        directory, file_name = os.path.split(path)
-        output_path = os.path.join(plugins_path, file_name)
-        print("Copying", path, "to", plugins_path)
-        open(output_path, "wb").write(open(path, "rb").read())
+    try:
+        for plugin in files:
+            path = os.path.abspath(plugin)
+            directory, file_name = os.path.split(path)
+            output_path = os.path.join(plugins_path, file_name)
+            print("Copying", path, "to", plugins_path)
+            open(output_path, "wb").write(open(path, "rb").read())
+    except PermissionError:
+        raise PermissionError("Run with write permissions to add widgets to qtDesigner in folder:\n\t" + \
+                          plugins_path)
 
 
 def compile_ui_file(files, output_files=None):

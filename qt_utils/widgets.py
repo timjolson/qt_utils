@@ -156,7 +156,7 @@ class _CollapsibleDockHelper(QtWidgets.QDockWidget):
             anim.setEndValue(end)
 
     def _doAnimation(self, checked):
-        self.configArrow(checked)
+        self._configArrow(checked)
         direction = QtCore.QAbstractAnimation.Forward if checked else QtCore.QAbstractAnimation.Backward
         self.toggleAnimation.setDirection(direction)
         self.toggleAnimation.start()
@@ -176,22 +176,28 @@ class HCollapsibleDockWidget(_CollapsibleDockHelper):
         frame.setContentsMargins(0, 0, 0, 0)
         self.setWidget(frame)
 
+    def setTitle(self, title):
+        self.titleBarWidget().setText(title)
+
+    # def setCheckable(self, checkable):
+    #     super().setCheckable(checkable)
+
     @QtCore.pyqtSlot()
     def collapse(self, collapse=True):
         if collapse == self.collapsed and self._inited is True:
             return
         elif collapse is True:
-            self.configAnimation(self.size().height(), self.collapsedSize)
-            self.doAnimation(collapse)
-            # self.widget().setHidden(collapse)
+            self._configAnimation(self.size().height(), self.collapsedSize)
+            self._doAnimation(collapse)
+            # self.setHidden(collapse)
         else:  # collapse is False:
-            self.doAnimation(collapse)
-            # self.widget().setHidden(collapse)
+            self._doAnimation(collapse)
+            # self.setHidden(collapse)
         self._collapsed = collapse
         self._inited = True
 
     def _configArrow(self, checked):
-        arrow_type = Qt.RightArrow if checked else Qt.DownArrow
+        arrow_type = QtCore.Qt.RightArrow if checked else QtCore.Qt.DownArrow
         self.titleBarWidget().setArrowType(arrow_type)
 
     @QtCore.pyqtSlot(int)
@@ -229,17 +235,17 @@ class VCollapsibleDockWidget(_CollapsibleDockHelper):
         if collapse == self.collapsed and self._inited is True:
             return
         elif collapse is True:
-            self.configAnimation(self.size().width(), self.collapsedSize)
-            self.doAnimation(collapse)
+            self._configAnimation(self.size().width(), self.collapsedSize)
+            self._doAnimation(collapse)
             # self.widget().setHidden(collapse)
         else:  # collapse is False:
-            self.doAnimation(collapse)
+            self._doAnimation(collapse)
             # self.widget().setHidden(collapse)
         self._collapsed = collapse
         self._inited = True
 
     def _configArrow(self, checked):
-        arrow_type = Qt.UpArrow if checked else Qt.RightArrow
+        arrow_type = QtCore.Qt.UpArrow if checked else QtCore.Qt.RightArrow
         self.titleBarWidget().setArrowType(arrow_type)
 
     @QtCore.pyqtSlot(int)
@@ -256,6 +262,79 @@ class VCollapsibleDockWidget(_CollapsibleDockHelper):
         toggleAnimation.addAnimation(QtCore.QPropertyAnimation(self, b"minimumWidth"))
         toggleAnimation.addAnimation(QtCore.QPropertyAnimation(self, b"maximumWidth"))
         toggleAnimation.addAnimation(QtCore.QPropertyAnimation(self.widget(), b"maximumWidth"))
+
+
+class CollapsibleGroupBox(QtWidgets.QGroupBox):
+    def __init__(self, parent, **kwargs):
+        super().__init__(parent)
+        self._collapsed = kwargs.pop('collapsed', False)
+        self._inited = False  # if widget has been collapsed/expanded once
+        self._collapsedSize = kwargs.pop('collapsedSize', 25)
+        self._setupToggleAnimation(kwargs.pop('animationDuration', 200))
+        self.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Maximum)
+        self.toggled.connect(self.toggle)
+
+    collapsed = property(lambda s:s._collapsed, lambda s, c:s.collapse(c))
+    collapsedSize = Qt.pyqtProperty(int, lambda s:s._collapsedSize, lambda s, p:s.setCollapsedSize(p))
+
+    @QtCore.pyqtSlot()
+    def toggle(self):
+        print('toggle')
+        print('collapsed', self.collapsed)
+        self.collapse(not self.collapsed)
+
+    @QtCore.pyqtSlot()
+    def expand(self, expand=True):
+        print('expand', expand)
+        self.collapse(not expand)
+
+    @QtCore.pyqtSlot()
+    def collapse(self, collapse=True):
+        print('collapse', collapse)
+        print('collapsed', self.collapsed)
+        print('inited', self._inited)
+        print('children', self.children())
+        print('layout', dir(self.layout()))
+        if collapse == self.collapsed and self._inited is True:
+            return
+        elif collapse is True:
+            self._configAnimation(self.size().height(), self.collapsedSize)
+            self._doAnimation(collapse)
+            # self.setVisible(not collapse)
+        else:  # collapse is False:
+            if self._inited is False:
+                self._configAnimation(self.sizeHint().height(), self.collapsedSize)
+            self._doAnimation(collapse)
+            # self.setVisible(not collapse)
+        self._collapsed = collapse
+        self._inited = True
+
+    def _configAnimation(self, start, end):
+        for i in range(self.toggleAnimation.animationCount()):
+            anim = self.toggleAnimation.animationAt(i)
+            anim.setDuration(self.animationDuration)
+            anim.setStartValue(start)
+            anim.setEndValue(end)
+
+    def _doAnimation(self, checked):
+        direction = QtCore.QAbstractAnimation.Forward if checked else QtCore.QAbstractAnimation.Backward
+        self.toggleAnimation.setDirection(direction)
+        self.toggleAnimation.start()
+
+    @QtCore.pyqtSlot(int)
+    def setCollapsedSize(self, px: int):
+        self._collapsedSize = px
+        if self.collapsed is True:
+            self.setFixedHeight(px)
+
+    def _setupToggleAnimation(self, duration):
+        self.animationDuration = duration
+        self.toggleAnimation = QtCore.QParallelAnimationGroup()
+
+        toggleAnimation = self.toggleAnimation
+        toggleAnimation.addAnimation(QtCore.QPropertyAnimation(self, b"minimumHeight"))
+        toggleAnimation.addAnimation(QtCore.QPropertyAnimation(self, b"maximumHeight"))
+        # toggleAnimation.addAnimation(QtCore.QPropertyAnimation(self.widget(), b"maximumHeight"))
 
 
 class DictComboBox(QtWidgets.QComboBox):
@@ -294,5 +373,5 @@ class DictComboBox(QtWidgets.QComboBox):
 
 __all__ = ['HorizontalLine', 'VerticalLine', 'VerticalLabel', 'VerticalTitleBar', 'HorizontalTitleBar',
            'HCollapsibleDockWidget', 'VCollapsibleDockWidget', 'AdjustableMixin',
-           'AdjustableContainer', 'AdjustableImage', 'DictComboBox'
+           'AdjustableContainer', 'AdjustableImage', 'CollapsibleGroupBox', 'DictComboBox'
            ]
