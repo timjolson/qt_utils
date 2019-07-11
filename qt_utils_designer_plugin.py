@@ -2,12 +2,7 @@ from qt_utils.designer import WidgetPluginFactory
 
 from qt_utils.widgets import \
     (VerticalLine, HorizontalLine, VerticalLabel, VerticalTitleBar, HorizontalTitleBar,
-     VCollapsibleDockWidget, HCollapsibleDockWidget, CollapsibleGroupBox, DictComboBox)
-from entryWidget import \
-    AutoColorLineEdit, EntryWidget, LabelLineEdit, ButtonLineEdit, ButtonEntryWidget
-from sympyEntryWidget import \
-    SympyAutoColorLineEdit, SympyEntryWidget, SympyLabelLineEdit, SympySymbolLineEdit
-
+     VCollapsibleDock, HCollapsibleDock, CollapsibleGroupBox, DictComboBox)
 
 VLinePlugin = WidgetPluginFactory(
     VerticalLine, toolTip='Vertical Line', isContainer=False)
@@ -23,8 +18,8 @@ DictComboBoxPlugin = WidgetPluginFactory(
     DictComboBox, toolTip='QComboBox, python usage allows dict for options with custom data', isContainer=False)
 
 CollapsibleGroupBoxPlugin = WidgetPluginFactory(CollapsibleGroupBox, toolTip='Collapsible GroupBox')
-HCollapsibleDockPlugin = WidgetPluginFactory(HCollapsibleDockWidget, toolTip='Collapsible DockWidget Horizontal Layout')
-VCollapsibleDockPlugin = WidgetPluginFactory(VCollapsibleDockWidget, toolTip='Collapsible DockWidget Vertical Layout')
+HCollapsibleDockPlugin = WidgetPluginFactory(HCollapsibleDock, toolTip='Collapsible DockWidget Horizontal Layout')
+VCollapsibleDockPlugin = WidgetPluginFactory(VCollapsibleDock, toolTip='Collapsible DockWidget Vertical Layout')
 def xml(self):
     xml = f'<widget class="{self.name()}" name="{self.name()}" >' \
         f'<widget class="QFrame" name="Contents" />' \
@@ -32,18 +27,3 @@ def xml(self):
     return xml
 HCollapsibleDockPlugin.domXml = xml
 VCollapsibleDockPlugin.domXml = xml
-
-AutoColorLineEditPlugin = WidgetPluginFactory(AutoColorLineEdit, toolTip='QLineEdit with automatic colors')
-LabelLineEditPlugin = WidgetPluginFactory(LabelLineEdit, toolTip='QLabel and AutoColorLineEdit')
-ButtonLabelLineEditPlugin = WidgetPluginFactory(ButtonLineEdit, toolTip='QPushButton and AutoColorLineEdit')
-EntryWidgetPlugin = WidgetPluginFactory(EntryWidget, toolTip='LabelLineEdit and QComboBox')
-ButtonEntryWidgetPlugin = WidgetPluginFactory(ButtonEntryWidget, toolTip='ButtonLineEdit and QComboBox')
-
-SympyAutoColorLineEditPlugin = WidgetPluginFactory(SympyAutoColorLineEdit,
-                                                   toolTip='QLineEdit with Sympy error checking and automatic colors')
-SympyLabelLineEditPlugin = WidgetPluginFactory(SympyLabelLineEdit,
-                                               toolTip='QLabel and SympyAutoColorLineEdit')
-SympySymbolLineEditPlugin = WidgetPluginFactory(SympySymbolLineEdit,
-                                                toolTip='SympyLabelLineEdit for creating sympy.Symbol')
-SympyEntryWidgetPlugin = WidgetPluginFactory(SympyEntryWidget,
-                                             toolTip='SympyLabelLineEdit and QComboBox for unit conversions')

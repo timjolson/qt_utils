@@ -1,6 +1,13 @@
 # qt_utils
 PyQt5 utils, QtDesigner Plugin utils and examples
 
+Installation
+
+    git clone https://github.com/timjolson/qt_utils.git  # clone repo
+    pip3 install qt_utils  # install (use -e if you want to edit/develop)
+    sudo python3 -m qt_utils  # install plugin file for QtDesigner
+
+
 Submodules
 
     utils  # functions, etc.
@@ -19,6 +26,18 @@ Submodules
         
     widgets  # collection of widgets
     qt_utils_designer_plugin.py  # plugin script for qtDesigner (install to system default with 'sudo python3 qt_utils')
+
+
+Widgets in qt_utils.widgets
+
+    VerticalLabel  # QLabel with rotated text
+    CollapsibleGroupBox  # QGroupbox that collapses when unchecked
+    DictComboBox  # QComboBox that accepts a dict's or kwargs to assign userData to items
+    
+    VerticalLine, HorizontalLine  # QFrame adjusted to match QtDesigner's line widgets
+    VerticalTitleBar, HorizontalTitleBar  # QWidget with QLabel and indicator arrow, clickable
+    VCollapsibleDock, HCollapsibleDock  # QDockWidget, custom clickable title bar, collapses/expands
+
 
 Subpackages
 
