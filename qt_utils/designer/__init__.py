@@ -2,7 +2,7 @@ from PyQt5 import QtGui
 from PyQt5.QtDesigner import QPyDesignerCustomWidgetPlugin
 import os
 
-__all__ = ['import_help', 'WidgetPluginFactory', 'install_plugin_files', 'compile_ui_file', 'get_designer_plugin_directory']
+__all__ = ['import_help', 'WidgetPluginFactory', 'install_plugin_files', 'compile_ui_files', 'get_designer_plugin_directory']
 
 import_help = \
 """
@@ -22,7 +22,7 @@ from PyQt5 import uic
 Ui_MainWindow, QtBaseClass = uic.loadUiType(uiFile)
 
 Ui_MainWindow.setupUi(instanceOfQtBaseClass)
-
+OR
 class MainWindow(QtBaseClass, Ui_MainWindow):
     def __init__(self):
         super().__init__()
@@ -34,7 +34,7 @@ Import as method from .ui file
 
 from PyQt5 import uic
 uic.loadUi(uiFile, someWidget)
-
+OR
 class MainWindow(QMainWindow):
     def __init__(self):
         super(MainWindow, self).__init__()
@@ -216,7 +216,7 @@ def install_plugin_files(files):
                           plugins_path)
 
 
-def compile_ui_file(files, output_files=None):
+def compile_ui_files(files, output_files=None):
     """
     Compile .ui files into .py files.
     *Prints each source and destination file.

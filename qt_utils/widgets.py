@@ -43,7 +43,8 @@ class VerticalLabel(QtWidgets.QLabel):
 
         txtopt = QtGui.QTextOption(self.alignment())
         painter.drawText(rect, self.text(), txtopt)
-        self.drawFrame(painter)
+
+        self.drawFrame(QtWidgets.QStylePainter(self))
 
 
 class _TitleBarHelper(QtWidgets.QWidget):
@@ -162,7 +163,7 @@ class _CollapsibleDockHelper(QtWidgets.QDockWidget):
         self.toggleAnimation.start()
 
 
-class HCollapsibleDockWidget(_CollapsibleDockHelper):
+class HCollapsibleDock(_CollapsibleDockHelper):
     def __init__(self, parent, **kwargs):
         super().__init__(parent, **kwargs)
         self.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
@@ -213,7 +214,7 @@ class HCollapsibleDockWidget(_CollapsibleDockHelper):
         toggleAnimation.addAnimation(QtCore.QPropertyAnimation(self.widget(), b"maximumHeight"))
 
 
-class VCollapsibleDockWidget(_CollapsibleDockHelper):
+class VCollapsibleDock(_CollapsibleDockHelper):
     def __init__(self, parent, **kwargs):
         super().__init__(parent, **kwargs)
         self.setFeatures(QtWidgets.QDockWidget.DockWidgetVerticalTitleBar)
@@ -269,6 +270,8 @@ class CollapsibleGroupBox(QtWidgets.QGroupBox):
         self._collapsedSize = kwargs.pop('collapsedSize', 25)
         self._setupToggleAnimation(kwargs.pop('animationDuration', 200))
         self.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Maximum)
+        self.setCheckable(True)
+        self.setChecked(True)
         self.toggled.connect(self.toggle)
 
     collapsed = property(lambda s:s._collapsed, lambda s, c:s.collapse(c))
@@ -276,22 +279,14 @@ class CollapsibleGroupBox(QtWidgets.QGroupBox):
 
     @QtCore.pyqtSlot()
     def toggle(self):
-        print('toggle')
-        print('collapsed', self.collapsed)
         self.collapse(not self.collapsed)
 
     @QtCore.pyqtSlot()
     def expand(self, expand=True):
-        print('expand', expand)
         self.collapse(not expand)
 
     @QtCore.pyqtSlot()
     def collapse(self, collapse=True):
-        print('collapse', collapse)
-        print('collapsed', self.collapsed)
-        print('inited', self._inited)
-        print('children', self.children())
-        print('layout', dir(self.layout()))
         if collapse == self.collapsed and self._inited is True:
             return
         elif collapse is True:
@@ -369,6 +364,6 @@ class DictComboBox(QtWidgets.QComboBox):
 
 
 __all__ = ['HorizontalLine', 'VerticalLine', 'VerticalLabel', 'VerticalTitleBar', 'HorizontalTitleBar',
-           'HCollapsibleDockWidget', 'VCollapsibleDockWidget', 'AdjustableMixin',
+           'HCollapsibleDock', 'VCollapsibleDock', 'AdjustableMixin',
            'AdjustableContainer', 'AdjustableImage', 'CollapsibleGroupBox', 'DictComboBox'
            ]
