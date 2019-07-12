@@ -66,6 +66,9 @@ class _TitleBarHelper(QtWidgets.QWidget):
     def setText(self, text):
         self.label.setText(text)
 
+    def text(self):
+        return self.label.text()
+
     def mousePressEvent(self, event=None):
         self._mousePressPos = event.pos()
 
@@ -127,7 +130,7 @@ class _CollapsibleDockHelper(QtWidgets.QDockWidget):
     def __init__(self, parent, **kwargs):
         super().__init__(parent)
         self._collapsed = kwargs.pop('collapsed', False)
-        self._inited = False  # if widget has been collapsed/expanded once
+        self._configedAnimation = False  # if widget has been collapsed/expanded once
         self._collapsedSize = kwargs.pop('collapsedSize', 20)
         self._setupTitleBar()
 
@@ -137,9 +140,6 @@ class _CollapsibleDockHelper(QtWidgets.QDockWidget):
         self.setWindowTitle(kwargs.pop('title', 'Collapsible'))
 
         self._configArrow(self.collapsed)
-
-    collapsed = property(lambda s:s._collapsed, lambda s, c:s.collapse(c))
-    collapsedSize = Qt.pyqtProperty(int, lambda s:s._collapsedSize, lambda s, p:s.setCollapsedSize(p))
 
     @QtCore.pyqtSlot()
     def toggle(self):
@@ -162,6 +162,15 @@ class _CollapsibleDockHelper(QtWidgets.QDockWidget):
         self.toggleAnimation.setDirection(direction)
         self.toggleAnimation.start()
 
+    def setTitle(self, title):
+        self.titleBarWidget().setText(title)
+
+    def title(self):
+        return self.titleBarWidget().text()
+
+    collapsed = Qt.pyqtProperty(bool, lambda s:s._collapsed, lambda s, c:s.collapse(c))
+    collapsedSize = Qt.pyqtProperty(int, lambda s:s._collapsedSize, lambda s, p:s.setCollapsedSize(p))
+
 
 class HCollapsibleDock(_CollapsibleDockHelper):
     def __init__(self, parent, **kwargs):
@@ -177,22 +186,19 @@ class HCollapsibleDock(_CollapsibleDockHelper):
         frame.setContentsMargins(0, 0, 0, 0)
         self.setWidget(frame)
 
-    def setTitle(self, title):
-        self.titleBarWidget().setText(title)
-
     @QtCore.pyqtSlot()
     def collapse(self, collapse=True):
-        if collapse == self.collapsed and self._inited is True:
+        if collapse == self.collapsed:
             return
-        elif collapse is True:
+        if collapse is True:
             self._configAnimation(self.size().height(), self.collapsedSize)
             self._doAnimation(collapse)
-            # self.setHidden(collapse)
         else:  # collapse is False:
+            if self._configedAnimation is False:
+                self._configAnimation(self.widget().minimumSizeHint().height(), self.collapsedSize)
+                self._configedAnimation = True
             self._doAnimation(collapse)
-            # self.setHidden(collapse)
         self._collapsed = collapse
-        self._inited = True
 
     def _configArrow(self, checked):
         arrow_type = QtCore.Qt.RightArrow if checked else QtCore.Qt.DownArrow
@@ -230,17 +236,17 @@ class VCollapsibleDock(_CollapsibleDockHelper):
 
     @QtCore.pyqtSlot()
     def collapse(self, collapse=True):
-        if collapse == self.collapsed and self._inited is True:
+        if collapse == self.collapsed:
             return
-        elif collapse is True:
+        if collapse is True:
             self._configAnimation(self.size().width(), self.collapsedSize)
             self._doAnimation(collapse)
-            # self.widget().setHidden(collapse)
         else:  # collapse is False:
+            if self._configedAnimation is False:
+                self._configAnimation(self.widget().minimumSizeHint().width(), self.collapsedSize)
+                self._configedAnimation = True
             self._doAnimation(collapse)
-            # self.widget().setHidden(collapse)
         self._collapsed = collapse
-        self._inited = True
 
     def _configArrow(self, checked):
         arrow_type = QtCore.Qt.UpArrow if checked else QtCore.Qt.RightArrow
@@ -274,7 +280,7 @@ class CollapsibleGroupBox(QtWidgets.QGroupBox):
         self.setChecked(True)
         self.toggled.connect(self.toggle)
 
-    collapsed = property(lambda s:s._collapsed, lambda s, c:s.collapse(c))
+    # collapsed = Qt.pyqtProperty(bool, lambda s:s._collapsed, lambda s, c:s.collapse(c))
     collapsedSize = Qt.pyqtProperty(int, lambda s:s._collapsedSize, lambda s, p:s.setCollapsedSize(p))
 
     @QtCore.pyqtSlot()
