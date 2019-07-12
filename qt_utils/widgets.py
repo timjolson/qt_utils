@@ -280,7 +280,7 @@ class CollapsibleGroupBox(QtWidgets.QGroupBox):
         self.setChecked(True)
         self.toggled.connect(self.toggle)
 
-    # collapsed = Qt.pyqtProperty(bool, lambda s:s._collapsed, lambda s, c:s.collapse(c))
+    collapsed = Qt.pyqtProperty(bool, lambda s:s._collapsed, lambda s, c:s.collapse(c))
     collapsedSize = Qt.pyqtProperty(int, lambda s:s._collapsedSize, lambda s, p:s.setCollapsedSize(p))
 
     @QtCore.pyqtSlot()
