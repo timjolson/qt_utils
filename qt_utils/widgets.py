@@ -370,6 +370,5 @@ class DictComboBox(QtWidgets.QComboBox):
 
 
 __all__ = ['HorizontalLine', 'VerticalLine', 'VerticalLabel', 'VerticalTitleBar', 'HorizontalTitleBar',
-           'HCollapsibleDock', 'VCollapsibleDock', 'AdjustableMixin',
-           'AdjustableContainer', 'AdjustableImage', 'CollapsibleGroupBox', 'DictComboBox'
+           'HCollapsibleDock', 'VCollapsibleDock', 'CollapsibleGroupBox', 'DictComboBox'
            ]
