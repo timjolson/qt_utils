@@ -1,5 +1,4 @@
 from PyQt5 import QtWidgets, Qt, QtCore, QtGui
-from qt_utils.adjustablewidget.adjustableWidget import AdjustableMixin, AdjustableImage, AdjustableContainer
 
 
 class HorizontalLine(QtWidgets.QFrame):
@@ -48,7 +47,7 @@ class VerticalLabel(QtWidgets.QLabel):
 
 
 class _TitleBarHelper(QtWidgets.QWidget):
-    clicked = Qt.pyqtSignal()
+    clicked = Qt.pyqtSignal([],[bool])
     DownArrow = QtCore.Qt.DownArrow
     RightArrow = QtCore.Qt.RightArrow
     LeftArrow = QtCore.Qt.LeftArrow
@@ -75,6 +74,7 @@ class _TitleBarHelper(QtWidgets.QWidget):
     def mouseReleaseEvent(self, event=None):
         if self._mousePressPos is not None:
             self._mousePressPos = None
+            self.clicked[bool].emit(True)
             self.clicked.emit()
 
 
@@ -274,13 +274,14 @@ class CollapsibleGroupBox(QtWidgets.QGroupBox):
         self._collapsed = kwargs.pop('collapsed', False)
         self._inited = False  # if widget has been collapsed/expanded once
         self._collapsedSize = kwargs.pop('collapsedSize', 25)
+        self._configedAnimation = False  # if widget has been collapsed/expanded once
         self._setupToggleAnimation(kwargs.pop('animationDuration', 200))
         self.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Maximum)
         self.setCheckable(True)
         self.setChecked(True)
         self.toggled.connect(self.toggle)
 
-    collapsed = Qt.pyqtProperty(bool, lambda s:s._collapsed, lambda s, c:s.collapse(c))
+    collapsed = property(lambda s:s._collapsed, lambda s, c:s.collapse(c))
     collapsedSize = Qt.pyqtProperty(int, lambda s:s._collapsedSize, lambda s, p:s.setCollapsedSize(p))
 
     @QtCore.pyqtSlot()
@@ -293,19 +294,17 @@ class CollapsibleGroupBox(QtWidgets.QGroupBox):
 
     @QtCore.pyqtSlot()
     def collapse(self, collapse=True):
-        if collapse == self.collapsed and self._inited is True:
+        if collapse == self.collapsed:
             return
-        elif collapse is True:
+        if collapse is True:
             self._configAnimation(self.size().height(), self.collapsedSize)
             self._doAnimation(collapse)
-            # self.setVisible(not collapse)
         else:  # collapse is False:
-            if self._inited is False:
-                self._configAnimation(self.sizeHint().height(), self.collapsedSize)
+            if self._configedAnimation is False:
+                self._configAnimation(self.minimumSizeHint().height(), self.collapsedSize)
+                self._configedAnimation = True
             self._doAnimation(collapse)
-            # self.setVisible(not collapse)
         self._collapsed = collapse
-        self._inited = True
 
     def _configAnimation(self, start, end):
         for i in range(self.toggleAnimation.animationCount()):
@@ -336,9 +335,13 @@ class CollapsibleGroupBox(QtWidgets.QGroupBox):
 
 
 class DictComboBox(QtWidgets.QComboBox):
+    dataChanged = Qt.pyqtSignal([],[object])
+
     def __init__(self, parent, **kwargs):
         options = kwargs.pop('options', dict())
         QtWidgets.QComboBox.__init__(self, parent)
+        self.currentIndexChanged.connect(lambda i: self.dataChanged[object].emit(self.itemData(i)))
+        self.currentIndexChanged.connect(lambda i: self.dataChanged.emit())
         self.addItems(options)
 
     def addItems(self, textToDataDict=None, **kwargs):
