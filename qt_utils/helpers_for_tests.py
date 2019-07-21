@@ -25,12 +25,6 @@ def change_title_on_typing(widget):
     widget.window().setWindowTitle(widget.text())
 
 
-def change_label_on_typing(widget):
-    """Uses widget.setLabel() to change the QLabel to widget.text()"""
-    widget.logger.debug('change label to: ' + widget.text())
-    widget.setLabel(widget.text())
-
-
 def change_color_on_option(widget, *args, **kwargs):
     """Uses widget.setColors() to change QLineEdit colors to (widget.getSelected(), 'black')"""
     widget.logger.debug('change_color')
