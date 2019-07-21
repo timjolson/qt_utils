@@ -19,25 +19,19 @@ def loggableQtName(self):
 
 
 class ErrorMixin():
-    hasError = pyqtSignal(object)
-    errorChanged = pyqtSignal(object)
+    """
+    signals:
+        hasError([]],[object],[str])  # emitted when bool(error status) is True
+        errorChanged([],[object],[str])  # emitted when error status changes
+        errorCleared  # emitted when bool(error status) is changed to False
+    """
+    hasError = pyqtSignal([],[object],[str])
+    errorChanged = pyqtSignal([],[object],[str])
     errorCleared = pyqtSignal()
 
     def __init__(self):
         super().__init__()
         self._error = None
-
-    @classmethod
-    def popArgs(cls, kwargs):
-        """Pop out kwargs for __init__.
-
-        :param kwargs: dict to remove arguments from
-        :return: dict of args to pass to __init__
-        """
-        args = {}
-        for k, v in cls.defaultArgs.items():
-            args[k] = kwargs.pop(k, cls.defaultArgs[k])
-        return args
 
     def getError(self):
         """Get object's error status.
@@ -58,19 +52,23 @@ class ErrorMixin():
 
         if status != self._error:
             self._error = status
-            self.errorChanged.emit(status)
+            self.errorChanged[object].emit(status)
+            self.errorChanged[str].emit(str(status))
+            self.errorChanged.emit()
 
             if status in [None, False]:
                 self.errorCleared.emit()
 
         if b is True:
-            self.hasError.emit(status)
+            self.hasError[object].emit(status)
+            self.hasError[str].emit(str(status))
+            self.hasError.emit()
 
     def clearError(self):
         """Reset error status to None
         :return:
         """
-        self._error = None
+        self.setError(None)
 
     error = property(getError, setError, clearError)
 
