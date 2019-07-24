@@ -50,6 +50,9 @@ class ErrorMixin():
         """
         b = bool(status)
 
+        if hasattr(self, 'logger'):
+            self.logger.debug(f'setError({status})')
+
         if status != self._error:
             self._error = status
             self.errorChanged[object].emit(status)
@@ -73,9 +76,10 @@ class ErrorMixin():
     error = property(getError, setError, clearError)
 
     def errorCheck(self, *args, **kwargs):
-        """Check whether object is in an error state.
+        """Checks whether object is in an error state.
         Does NOT update the object's error state.
-        Override recommended.
+
+        Recommend overriding to return any type of error status.
 
         :return: bool
         """
