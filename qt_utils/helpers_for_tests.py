@@ -42,7 +42,7 @@ def do_whats_typed(widget, *args, **kwargs):
     'fixed': widget.setReadOnly(True)
     'disabled': widget.setEnabled(False)
     'close': widget.window().close()
-    'auto': widget.setAutoColors()
+    'auto': widget.setColors()
     'color': widget.setColors(('pink', 'black'))
 
     Otherwise:
@@ -57,7 +57,7 @@ def do_whats_typed(widget, *args, **kwargs):
         'fixed': (lambda x: widget.setReadOnly(True)),
         'disabled': (lambda x: widget.setEnabled(False)),
         'close': (lambda x: widget.window().close()),
-        'auto': (lambda x: widget.setAutoColors()),
+        'auto': (lambda x: widget.setColors()),
         'color': (lambda x: widget.setColors(('pink', 'black')))
     }
     if widget.text() in do.keys():
