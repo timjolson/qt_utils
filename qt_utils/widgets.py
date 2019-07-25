@@ -1,4 +1,5 @@
 from PyQt5 import QtWidgets, Qt, QtCore, QtGui
+import logging
 
 
 class HorizontalLine(QtWidgets.QFrame):
@@ -342,6 +343,7 @@ class DictComboBox(QtWidgets.QComboBox):
         QtWidgets.QComboBox.__init__(self, parent)
         self.currentIndexChanged.connect(lambda i: self.dataChanged[object].emit(self.itemData(i)))
         self.currentIndexChanged.connect(lambda i: self.dataChanged.emit())
+        self.setDuplicatesEnabled(False)
         self.addItems(options)
 
     def addItems(self, textToDataDict=None, **kwargs):
@@ -368,8 +370,11 @@ class DictComboBox(QtWidgets.QComboBox):
         return {self.itemText(i):self.itemData(i) for i in range(self.count())}
 
     def setAllItems(self, textToDataDict=None, **kwargs):
+        self.blockSignals(True)
         self.clear()
-        self.addItems(textToDataDict, **kwargs)
+        self.insertItems(0, textToDataDict)
+        self.blockSignals(False)
+        self.setCurrentIndex(0)
 
 
 __all__ = ['HorizontalLine', 'VerticalLine', 'VerticalLabel', 'VerticalTitleBar', 'HorizontalTitleBar',
