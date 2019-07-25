@@ -336,12 +336,13 @@ class CollapsibleGroupBox(QtWidgets.QGroupBox):
 
 
 class DictComboBox(QtWidgets.QComboBox):
-    dataChanged = Qt.pyqtSignal([],[object])
+    dataChanged = Qt.pyqtSignal([],[object],[str])
 
     def __init__(self, parent, **kwargs):
         options = kwargs.pop('options', dict())
         QtWidgets.QComboBox.__init__(self, parent)
         self.currentIndexChanged.connect(lambda i: self.dataChanged[object].emit(self.itemData(i)))
+        self.currentIndexChanged.connect(lambda i: self.dataChanged[str].emit(str(self.itemData(i))))
         self.currentIndexChanged.connect(lambda i: self.dataChanged.emit())
         self.setDuplicatesEnabled(False)
         self.setAllItems(options)
