@@ -50,9 +50,6 @@ class ErrorMixin():
         """
         b = bool(status)
 
-        if hasattr(self, 'logger'):
-            self.logger.debug(f'setError({status})')
-
         if status != self._error:
             self._error = status
             self.errorChanged[object].emit(status)
