@@ -344,7 +344,7 @@ class DictComboBox(QtWidgets.QComboBox):
         self.currentIndexChanged.connect(lambda i: self.dataChanged[object].emit(self.itemData(i)))
         self.currentIndexChanged.connect(lambda i: self.dataChanged.emit())
         self.setDuplicatesEnabled(False)
-        self.addItems(options)
+        self.setAllItems(options)
 
     def addItems(self, textToDataDict=None, **kwargs):
         self.insertItems(self.count()-1, textToDataDict, **kwargs)
@@ -372,9 +372,18 @@ class DictComboBox(QtWidgets.QComboBox):
     def setAllItems(self, textToDataDict=None, **kwargs):
         self.blockSignals(True)
         self.clear()
-        self.insertItems(0, textToDataDict)
-        self.blockSignals(False)
+        self.insertItems(0, textToDataDict, **kwargs)
         self.setCurrentIndex(0)
+        self.blockSignals(False)
+        self.currentTextChanged[str].emit(self.itemText(0))
+        self.currentIndexChanged.emit(0)
+
+    def setCurrentText(self, text):
+        self.blockSignals(True)
+        super().setCurrentText(text)
+        self.blockSignals(False)
+        self.currentTextChanged[str].emit(text)
+        self.currentIndexChanged[int].emit(self.currentIndex())
 
 
 __all__ = ['HorizontalLine', 'VerticalLine', 'VerticalLabel', 'VerticalTitleBar', 'HorizontalTitleBar',
