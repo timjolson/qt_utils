@@ -196,7 +196,7 @@ class HCollapsibleDock(_CollapsibleDockHelper):
             self._doAnimation(collapse)
         else:  # collapse is False:
             if self._configedAnimation is False:
-                self._configAnimation(self.widget().minimumSizeHint().height(), self.collapsedSize)
+                self._configAnimation(self.widget().minimumSizeHint().height()+self.collapsedSize, self.collapsedSize)
                 self._configedAnimation = True
             self._doAnimation(collapse)
         self._collapsed = collapse
@@ -244,7 +244,7 @@ class VCollapsibleDock(_CollapsibleDockHelper):
             self._doAnimation(collapse)
         else:  # collapse is False:
             if self._configedAnimation is False:
-                self._configAnimation(self.widget().minimumSizeHint().width(), self.collapsedSize)
+                self._configAnimation(self.widget().minimumSizeHint().width()+self.collapsedSize, self.collapsedSize)
                 self._configedAnimation = True
             self._doAnimation(collapse)
         self._collapsed = collapse
