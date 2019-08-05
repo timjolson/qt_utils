@@ -133,6 +133,7 @@ class _CollapsibleDockHelper(QtWidgets.QDockWidget):
         self._collapsed = kwargs.pop('collapsed', False)
         self._configedAnimation = False  # if widget has been collapsed/expanded once
         self._collapsedSize = kwargs.pop('collapsedSize', 20)
+        self._childFocusPolicy = dict()
         self._setupTitleBar()
 
         self._setupToggleAnimation(kwargs.pop('animationDuration', 200))
@@ -169,6 +170,23 @@ class _CollapsibleDockHelper(QtWidgets.QDockWidget):
     def title(self):
         return self.titleBarWidget().text()
 
+    def _noFocusChildren(self, collapse):
+        children = self.findChildren(QtWidgets.QWidget)
+        list(map(children.remove, (c for c in children if isinstance(c, (
+            QtWidgets.QFrame, QtWidgets.QLayout, QtWidgets.QScrollBar
+        )))))
+        children.remove(self.titleBarWidget())
+        for c in self.titleBarWidget().children():
+            try: children.remove(c)
+            except ValueError: pass
+
+        for c in children:
+            if collapse:
+                self._childFocusPolicy[c] = c.focusPolicy()
+                c.setFocusPolicy(QtCore.Qt.NoFocus)
+            else:
+                c.setFocusPolicy(self._childFocusPolicy[c])
+
     collapsed = Qt.pyqtProperty(bool, lambda s:s._collapsed, lambda s, c:s.collapse(c))
     collapsedSize = Qt.pyqtProperty(int, lambda s:s._collapsedSize, lambda s, p:s.setCollapsedSize(p))
 
@@ -199,6 +217,7 @@ class HCollapsibleDock(_CollapsibleDockHelper):
                 self._configAnimation(self.widget().minimumSizeHint().height()+self.collapsedSize, self.collapsedSize)
                 self._configedAnimation = True
             self._doAnimation(collapse)
+        self._noFocusChildren(collapse)
         self._collapsed = collapse
 
     def _configArrow(self, checked):
@@ -247,6 +266,7 @@ class VCollapsibleDock(_CollapsibleDockHelper):
                 self._configAnimation(self.widget().minimumSizeHint().width()+self.collapsedSize, self.collapsedSize)
                 self._configedAnimation = True
             self._doAnimation(collapse)
+        self._noFocusChildren(collapse)
         self._collapsed = collapse
 
     def _configArrow(self, checked):
@@ -305,7 +325,21 @@ class CollapsibleGroupBox(QtWidgets.QGroupBox):
                 self._configAnimation(self.minimumSizeHint().height(), self.collapsedSize)
                 self._configedAnimation = True
             self._doAnimation(collapse)
+        self._noFocusChildren(collapse)
         self._collapsed = collapse
+
+    def _noFocusChildren(self, collapse):
+        children = self.findChildren(QtWidgets.QWidget)
+        list(map(children.remove, (c for c in children if isinstance(c, (
+            QtWidgets.QFrame, QtWidgets.QLayout, QtWidgets.QScrollBar
+        )))))
+
+        for c in children:
+            if collapse:
+                self._childFocusPolicy[c] = c.focusPolicy()
+                c.setFocusPolicy(QtCore.Qt.NoFocus)
+            else:
+                c.setFocusPolicy(self._childFocusPolicy[c])
 
     def _configAnimation(self, start, end):
         for i in range(self.toggleAnimation.animationCount()):
