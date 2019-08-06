@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Form</class>
+ <widget class="QWidget" name="Form">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>400</width>
+    <height>300</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QGroupBox" name="groupBox">
+     <property name="title">
+      <string>GroupBox</string>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <widget class="RemoteRadioButton" name="b1">
+        <property name="text">
+         <string>1</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="RemoteRadioButton" name="b4">
+        <property name="text">
+         <string>4</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>TextLabel</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="groupBox_2">
+     <property name="title">
+      <string>GroupBox</string>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout_2">
+      <item>
+       <widget class="RemoteRadioButton" name="b2">
+        <property name="text">
+         <string>2</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="RemoteRadioButton" name="b3">
+        <property name="text">
+         <string>3</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>RemoteRadioButton</class>
+   <extends>QRadioButton</extends>
+   <header>qt_utils.widgets</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>b1</sender>
+   <signal>friends()</signal>
+   <receiver>b2</receiver>
+   <slot>friends()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>86</x>
+     <y>74</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>108</x>
+     <y>266</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>b2</sender>
+   <signal>friends()</signal>
+   <receiver>b3</receiver>
+   <slot>friends()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>65</x>
+     <y>266</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>378</x>
+     <y>266</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>b3</sender>
+   <signal>friends()</signal>
+   <receiver>b4</receiver>
+   <slot>friends()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>378</x>
+     <y>266</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>378</x>
+     <y>74</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>b4</sender>
+   <signal>friends()</signal>
+   <receiver>b1</receiver>
+   <slot>friends()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>378</x>
+     <y>74</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>174</x>
+     <y>74</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>b4</sender>
+   <signal>radioChanged(QString)</signal>
+   <receiver>label</receiver>
+   <slot>setText(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>260</x>
+     <y>64</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>108</x>
+     <y>135</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>
