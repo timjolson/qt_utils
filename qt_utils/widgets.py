@@ -296,6 +296,7 @@ class CollapsibleGroupBox(QtWidgets.QGroupBox):
         self._inited = False  # if widget has been collapsed/expanded once
         self._collapsedSize = kwargs.pop('collapsedSize', 25)
         self._configedAnimation = False  # if widget has been collapsed/expanded once
+        self._childFocusPolicy = dict()
         self._setupToggleAnimation(kwargs.pop('animationDuration', 200))
         self.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Maximum)
         self.setCheckable(True)
@@ -421,6 +422,67 @@ class DictComboBox(QtWidgets.QComboBox):
         self.currentIndexChanged[int].emit(self.currentIndex())
 
 
+class RemoteRadioButton(QtWidgets.QRadioButton):
+    exclusive = QtCore.pyqtSignal()
+    friends = QtCore.pyqtSignal()
+    radioChanged = QtCore.pyqtSignal([object], [str])
+
+    def __init__(self, parent=None, friends=None, **kwargs):
+        self._buddies = set()
+        kwargs.setdefault('text', kwargs.get('objectName', 'RemoteRadio'))
+        super().__init__(parent, **kwargs)
+        self.setAutoExclusive(False)
+        self.clicked.connect(self.on_click)
+
+        self.radioChanged[object].connect(lambda o:self.radioChanged[str].emit(str(o)))
+
+        if friends is not None:
+            if hasattr(friends, '__iter__'):
+                self.add_friends(*friends)
+            else:
+                self.add_friends(friends)
+        self.friends.emit()
+
+    @QtCore.pyqtSlot(bool, name='clicked')
+    def on_click(self, checked):
+        # print(self.objectName(), 'clicked')
+        if not self._buddies:
+            # print(self.objectName(), 'finding friends')
+            self.friends.emit()
+        if checked:
+            self.radioChanged[object].emit(self)
+            self.exclusive.emit()
+        else:
+            self.setChecked(True)
+
+    def exclusive_rx(self):
+        # print('rx', self.objectName())
+        self.radioChanged[object].emit(self.sender())
+        self.setChecked(False)
+
+    @QtCore.pyqtSlot(name='friends')
+    def add_friends(self, *buddies):
+        if not buddies:
+            # print(self.objectName(), 'rx signal', self.sender().objectName())
+            buddies = [self.sender()]+list(self.sender()._buddies)
+        else:
+            # print(self.objectName(), 'add_friends', [b.objectName() for b in buddies])
+            pass
+        buddies = list(buddies)
+        for buddy in buddies:
+            if buddy not in self._buddies and buddy is not self:
+                # print(self.objectName(), 'add buddy', buddy.objectName())
+                self._buddies.add(buddy)
+                buddy.friends.emit()
+                try: self.exclusive.disconnect(buddy.exclusive_rx)
+                except TypeError: pass
+                self.exclusive.connect(buddy.exclusive_rx)
+
+                for b in list(self._buddies):
+                    b.add_friends(self)
+                    b.add_friends(*self._buddies)
+
+
 __all__ = ['HorizontalLine', 'VerticalLine', 'VerticalLabel', 'VerticalTitleBar', 'HorizontalTitleBar',
-           'HCollapsibleDock', 'VCollapsibleDock', 'CollapsibleGroupBox', 'DictComboBox'
+           'HCollapsibleDock', 'VCollapsibleDock', 'CollapsibleGroupBox', 'DictComboBox', 'RemoteRadioButton'
            ]

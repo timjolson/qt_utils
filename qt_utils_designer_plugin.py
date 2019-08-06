@@ -2,7 +2,7 @@ from qt_utils.designer import WidgetPluginFactory
 
 from qt_utils.widgets import \
     (VerticalLine, HorizontalLine, VerticalLabel, VerticalTitleBar, HorizontalTitleBar,
-     VCollapsibleDock, HCollapsibleDock, CollapsibleGroupBox, DictComboBox)
+     VCollapsibleDock, HCollapsibleDock, CollapsibleGroupBox, DictComboBox, RemoteRadioButton)
 
 VLinePlugin = WidgetPluginFactory(
     VerticalLine, toolTip='Vertical Line', isContainer=False)
@@ -16,6 +16,8 @@ HTitleBarPlugin = WidgetPluginFactory(
     HorizontalTitleBar, toolTip='Clickable Horizontal Title Bar', isContainer=False)
 DictComboBoxPlugin = WidgetPluginFactory(
     DictComboBox, toolTip='QComboBox, python usage allows dict for options with custom data', isContainer=False)
+RemoteRadioButtonPlugin = WidgetPluginFactory(
+    RemoteRadioButton, toolTip='RadioButton with manual exclusivity via `friend` signal', isContainer=False)
 
 CollapsibleGroupBoxPlugin = WidgetPluginFactory(CollapsibleGroupBox, toolTip='Collapsible GroupBox')
 HCollapsibleDockPlugin = WidgetPluginFactory(HCollapsibleDock, toolTip='Collapsible DockWidget Horizontal Layout')
