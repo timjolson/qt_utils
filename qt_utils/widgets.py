@@ -185,7 +185,7 @@ class _CollapsibleDockHelper(QtWidgets.QDockWidget):
                 self._childFocusPolicy[c] = c.focusPolicy()
                 c.setFocusPolicy(QtCore.Qt.NoFocus)
             else:
-                c.setFocusPolicy(self._childFocusPolicy[c])
+                c.setFocusPolicy(self._childFocusPolicy.get(c, QtCore.Qt.StrongFocus))
 
     collapsed = Qt.pyqtProperty(bool, lambda s:s._collapsed, lambda s, c:s.collapse(c))
     collapsedSize = Qt.pyqtProperty(int, lambda s:s._collapsedSize, lambda s, p:s.setCollapsedSize(p))
@@ -263,7 +263,9 @@ class VCollapsibleDock(_CollapsibleDockHelper):
             self._doAnimation(collapse)
         else:  # collapse is False:
             if self._configedAnimation is False:
-                self._configAnimation(self.widget().minimumSizeHint().width()+self.collapsedSize, self.collapsedSize)
+                self._configAnimation(
+                    self.widget().minimumSizeHint().width()+self.collapsedSize+self.titleBarWidget().width(),
+                    self.collapsedSize)
                 self._configedAnimation = True
             self._doAnimation(collapse)
         self._noFocusChildren(collapse)
