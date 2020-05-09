@@ -8,6 +8,6 @@ setup(
     author = 'timjolson',
     author_email = 'timjolson@user.noreply.github.com',
     packages=find_packages(),
-    install_requires=['PyQt5'],
-    tests_require=['pytest'],
+    install_requires=['PyQt5==5.9'],
+    tests_require=['pytest', 'pytest-qt'],
 )
