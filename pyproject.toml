@@ -1,0 +1,22 @@
+[project]
+name = "qt_utils"
+version = "0.6"
+description = "PyQt5 helpers and widgets, qtDesigner helpers"
+authors = [
+    { name = "timjolson", email = "timjolson@users.noreply.github.com" }
+]
+readme = "README.md"
+requires-python = ">=3.6"
+dependencies = [
+    "PyQt5>=5.9"
+]
+
+[project.optional-dependencies]
+test = [
+    "pytest",
+    "pytest-qt"
+]
+
+[build-system]
+requires = ["setuptools>=42", "wheel"]
+build-backend = "setuptools.build_meta"
