@@ -6,6 +6,8 @@ authors = [
     { name = "timjolson", email = "timjolson@users.noreply.github.com" }
 ]
 readme = "README.md"
+urls = { "Homepage" = "https://github.com/timjolson/qt_utils" }
+license = { file = "LICENSE" }
 requires-python = ">=3.6"
 dependencies = [
     "PyQt5>=5.9"

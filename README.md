@@ -53,3 +53,7 @@ Subpackages
             
 
 *Plugin examples adapted from  https://doc.qt.io/archives/qq/qq26-pyqtdesigner.html
+
+## License
+
+See [LICENSE](LICENSE) for details.
